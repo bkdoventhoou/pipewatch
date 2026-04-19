@@ -81,3 +81,16 @@ def test_to_dict_keys():
     d = a.to_dict()
     for key in ("pipeline", "metric_name", "count", "min", "max", "mean", "median", "statuses"):
         assert key in d
+
+
+def test_aggregate_even_count_median():
+    """Median of an even number of values should be the average of the two middle values."""
+    metrics = [
+        make_metric(value=10.0),
+        make_metric(value=20.0),
+        make_metric(value=30.0),
+        make_metric(value=40.0),
+    ]
+    result = aggregate_metrics(metrics)
+    assert len(result) == 1
+    assert result[0].median_value == 25.0
