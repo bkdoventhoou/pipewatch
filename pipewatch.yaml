@@ -1,0 +1,22 @@
+# pipewatch configuration
+
+thresholds:
+  - metric_name: row_count
+    warning: 1000
+    critical: 5000
+    comparison: gt
+
+  - metric_name: error_rate
+    warning: 0.05
+    critical: 0.10
+    comparison: gt
+
+  - metric_name: lag_seconds
+    warning: 300
+    critical: 900
+    comparison: gt
+
+  - metric_name: null_ratio
+    warning: 0.02
+    critical: 0.10
+    comparison: gt
