@@ -15,6 +15,7 @@ def make_metric(pipeline="pipe1", name="rows", value=10.0, status=MetricStatus.O
 
 
 def _mock_collector(metrics):
+    """Build a mock collector whose _history mirrors the given metrics list."""
     collector = MagicMock()
     history = {}
     for m in metrics:
@@ -74,6 +75,21 @@ def test_main_pipeline_filter(capsys):
     out = capsys.readouterr().out
     assert "pipe1" in out
     assert "pipe2" not in out
+
+
+def test_main_metric_filter(capsys):
+    """Only the requested metric name should appear in the output."""
+    metrics = [
+        make_metric(name="rows", value=10.0),
+        make_metric(name="errors", value=3.0),
+    ]
+    collector = _mock_collector(metrics)
+    with patch("pipewatch.cli_aggregate.load_config", return_value={}), \
+         patch("pipewatch.cli_aggregate.build_collector_from_config", return_value=collector):
+        main(["--metric", "rows", "--format", "text"])
+    out = capsys.readouterr().out
+    assert "rows" in out
+    assert "errors" not in out
 
 
 def test_main_no_metrics(capsys):
