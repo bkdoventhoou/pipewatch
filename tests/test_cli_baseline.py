@@ -21,6 +21,13 @@ def _mock_collector(metrics):
     return col
 
 
+def _write_baseline(path, entries):
+    """Helper to save a baseline file for use in compare tests."""
+    from pipewatch.baseline import save_baseline
+    save_baseline(entries, path)
+    return path
+
+
 def test_parse_args_defaults():
     from pipewatch.cli_baseline import parse_args
     args = parse_args(["capture"])
@@ -50,9 +57,7 @@ def test_main_capture(tmp_path, capsys):
 
 def test_main_compare_text(tmp_path, capsys):
     from pipewatch.cli_baseline import main
-    from pipewatch.baseline import save_baseline
-    bl_path = str(tmp_path / "baseline.json")
-    save_baseline([BaselineEntry("etl", "rows", 100.0)], bl_path)
+    bl_path = str(_write_baseline(tmp_path / "baseline.json", [BaselineEntry("etl", "rows", 100.0)]))
     metrics = [make_metric("etl", "rows", 110.0)]
     with patch("pipewatch.cli_baseline.load_config", return_value={}), \
          patch("pipewatch.cli_baseline.build_collector_from_config", return_value=_mock_collector(metrics)):
@@ -64,9 +69,7 @@ def test_main_compare_text(tmp_path, capsys):
 
 def test_main_compare_json(tmp_path, capsys):
     from pipewatch.cli_baseline import main
-    from pipewatch.baseline import save_baseline
-    bl_path = str(tmp_path / "baseline.json")
-    save_baseline([BaselineEntry("etl", "rows", 50.0)], bl_path)
+    bl_path = str(_write_baseline(tmp_path / "baseline.json", [BaselineEntry("etl", "rows", 50.0)]))
     metrics = [make_metric("etl", "rows", 75.0)]
     with patch("pipewatch.cli_baseline.load_config", return_value={}), \
          patch("pipewatch.cli_baseline.build_collector_from_config", return_value=_mock_collector(metrics)):
