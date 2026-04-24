@@ -24,8 +24,18 @@ def parse_args(argv=None):
 
 def main(argv=None):
     args = parse_args(argv)
-    config = load_config(args.config)
-    collector = build_collector_from_config(config)
+
+    try:
+        config = load_config(args.config)
+    except FileNotFoundError:
+        print(f"Error: config file '{args.config}' not found.", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        collector = build_collector_from_config(config)
+    except Exception as exc:
+        print(f"Error: failed to build collector: {exc}", file=sys.stderr)
+        sys.exit(1)
 
     all_metrics = []
     for pipeline_name, history in collector._history.items():
