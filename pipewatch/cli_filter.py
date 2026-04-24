@@ -44,8 +44,18 @@ def parse_args(argv=None):
 
 def main(argv=None):
     args = parse_args(argv)
-    config = load_config(args.config)
-    collector = build_collector_from_config(config)
+
+    try:
+        config = load_config(args.config)
+    except FileNotFoundError:
+        print(f"Error: Config file '{args.config}' not found.", file=sys.stderr)
+        return 1
+
+    try:
+        collector = build_collector_from_config(config)
+    except Exception as exc:
+        print(f"Error: Failed to build collector: {exc}", file=sys.stderr)
+        return 1
 
     all_metrics = collector.get_history()
 
