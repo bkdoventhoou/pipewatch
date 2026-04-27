@@ -4,70 +4,70 @@ Lightweight CLI for monitoring and alerting on ETL pipeline health metrics.
 
 ## Features
 
-- **Metric collection** – record pipeline metrics with configurable warning/critical thresholds
-- **Alerting** – dispatch alerts via console or file handlers with deduplication, throttling, rate-limiting, suppression, silencing, and escalation
-- **Reporting** – text and JSON reports with per-pipeline summaries
-- **Watching** – continuous polling loop with configurable interval
-- **Filtering** – filter metrics by status, pipeline, or name
-- **Aggregation** – min/max/avg/count rollups per pipeline and metric
-- **Trend analysis** – linear slope detection over metric history
-- **Baseline comparison** – compare current metrics against a saved baseline
-- **Anomaly detection** – z-score based spike detection
+- **Metrics & Thresholds** – define warning/critical bands per pipeline metric
+- **Alerts** – pluggable dispatcher with console and file handlers
+- **Reports** – text and JSON summaries of pipeline health
+- **Watcher** – periodic polling loop with alert dispatch
+- **Scheduler** – interval-based task runner
+- **Exporter** – dump reports to JSON or CSV
+- **Filter** – slice metrics by status, pipeline, or name
+- **Aggregator** – min/max/avg rollups per pipeline+metric key
+- **Summary** – per-pipeline health overview
+- **Trend** – linear slope analysis over metric history
+- **Baseline** – save and compare against a reference snapshot
+- **Anomaly** – z-score spike detection
 - **Correlation** – Pearson correlation between metric series
-- **Snapshots & replay** – capture and replay point-in-time metric state
-- **Digest** – periodic summary reports across all pipelines
-- **Retention** – prune old metrics by age or count
-- **Tagging** – attach key/value tags to metrics for richer context
-- **Routing** – route alerts to different handlers based on pipeline/metric/status rules
-- **Enrichment** – attach contextual metadata to metrics before alerting
-- **Audit log** – record status transition events per pipeline
-- **Forecasting** – linear extrapolation of metric values
-- **Rollup** – bucket metrics into time windows
-- **Grouping** – group metrics by pipeline with aggregate health
-- **Checkpointing** – record periodic pipeline health snapshots
-- **Dependency propagation** – propagate status through a pipeline dependency graph
-- **SLA tracking** – evaluate SLA targets and record breach events
-- **Notifications** – multi-channel notification manager with minimum severity filtering
-- **Sampling** – downsample high-frequency metric histories by count or stride
+- **Snapshot** – point-in-time capture with diff support
+- **Replay** – step through historical snapshots
+- **Digest** – concise multi-pipeline health digest
+- **Retention** – prune history by age or count
+- **Tagging** – attach arbitrary key/value tags to metrics
+- **Throttle** – per-metric alert cooldown
+- **Routing** – rule-based alert channel routing
+- **Deduplication** – suppress repeated identical alerts within a window
+- **Escalation** – auto-escalate alerts after repeated breaches
+- **Suppression** – time-windowed alert suppression
+- **Enrichment** – attach contextual metadata to metrics
+- **Silencing** – rule-based alert silencing with optional expiry
+- **Rate Limiting** – cap alert volume per pipeline/metric
+- **Grouping** – aggregate metrics into named groups
+- **Checkpoint** – record and compare pipeline status snapshots
+- **Dependency** – model upstream/downstream pipeline relationships
+- **SLA Tracking** – track and report SLA breaches
+- **Notifications** – multi-channel notification dispatch
+- **Audit** – log status transition events
+- **Forecast** – linear extrapolation of future metric values
+- **Rollup** – time-bucketed metric aggregation
+- **Sampling** – downsample long metric series
+- **Labeling** – structured label registry with filter support
+- **Scoring** – composite health score per pipeline
+- **Profiling** – statistical profile (mean, std, percentiles)
+- **Heatmap** – hourly status heatmap per pipeline
+- **Windowing** – sliding time-window slicing
+- **Budget** – error budget tracking per pipeline
+- **Capacity** – threshold-based capacity breach reporting
+- **Drift** – detect mean-shift between two halves of a series
+- **Topology** – directed graph of pipeline relationships
+- **Partitioning** – partition metrics by time bucket
+- **Watermark** – track high/low watermarks per metric
+- **Jitter** – detect oscillating/flapping metrics
+- **Latency** – inter-metric arrival gap analysis
+- **Saturation** – utilisation ratio relative to a capacity limit
+- **Outlier** – IQR-based outlier detection
+- **Velocity** – rate-of-change analysis
+- **Normalization** – min-max and z-score normalization
+- **Stickiness** – detect metrics stuck in a non-OK state
+- **Recurrence** – identify metrics that repeatedly breach thresholds
 
-## Installation
+## Quick Start
 
 ```bash
-pip install -e .
+pip install pipewatch
+pipewatch-report --config pipewatch.yaml
+pipewatch-watch  --config pipewatch.yaml
+pipewatch-recurrence --config pipewatch.yaml --recurring-only
 ```
 
-## Configuration
+## Configuration (`pipewatch.yaml`)
 
-See `pipewatch.yaml` for an example configuration.
-
-## CLI Commands
-
-| Command | Description |
-|---|---|
-| `pipewatch-report` | Run a one-shot report |
-| `pipewatch-watch` | Continuously watch pipelines |
-| `pipewatch-filter` | Filter and display metrics |
-| `pipewatch-aggregate` | Aggregate metric statistics |
-| `pipewatch-trend` | Analyse metric trends |
-| `pipewatch-baseline` | Compare against a saved baseline |
-| `pipewatch-anomaly` | Detect metric anomalies |
-| `pipewatch-correlation` | Correlate metric pairs |
-| `pipewatch-snapshot` | Capture and diff snapshots |
-| `pipewatch-replay` | Replay a recorded session |
-| `pipewatch-digest` | Generate a digest report |
-| `pipewatch-routing` | Show alert routing rules |
-| `pipewatch-tagging` | Manage metric tags |
-| `pipewatch-throttle` | Show throttle state |
-| `pipewatch-deduplication` | Show deduplication state |
-| `pipewatch-escalation` | Show escalation state |
-| `pipewatch-suppression` | Manage suppression windows |
-| `pipewatch-enrichment` | Apply enrichment rules |
-| `pipewatch-ratelimit` | Show rate limit state |
-| `pipewatch-checkpoint` | Record and show checkpoints |
-| `pipewatch-dependency` | Show dependency graph |
-| `pipewatch-sla` | Track SLA breaches |
-| `pipewatch-notification` | Send notifications |
-| `pipewatch-audit` | Show audit log |
-| `pipewatch-forecast` | Forecast metric values |
-| `pipewatch-rollup` | Rollup metrics into buckets |
-| `pipewatch-sampling` | Downsample metric histories |
+See `pipewatch.yaml` for a full example.
