@@ -1,5 +1,5 @@
 """Metric collection and threshold evaluation."""
-from typing import List, Dict
+from typing import List, Dict, Optional
 from pipewatch.metrics import PipelineMetric, ThresholdConfig, MetricStatus
 
 
@@ -39,6 +39,22 @@ class MetricCollector:
                 if pipeline_name is None or m.pipeline_name == pipeline_name:
                     seen[key] = m
         return list(seen.values())
+
+    def summary(self, pipeline_name: str = None) -> Dict[str, int]:
+        """Return a count of metrics grouped by status for the latest snapshot.
+
+        Args:
+            pipeline_name: If provided, restrict summary to that pipeline.
+
+        Returns:
+            A dict mapping each MetricStatus name to the number of metrics
+            currently in that state, based on the latest recorded value per
+            (pipeline, metric_name) pair.
+        """
+        counts: Dict[str, int] = {status.name: 0 for status in MetricStatus}
+        for metric in self.latest(pipeline_name=pipeline_name):
+            counts[metric.status.name] += 1
+        return counts
 
     def clear(self) -> None:
         self._history.clear()
