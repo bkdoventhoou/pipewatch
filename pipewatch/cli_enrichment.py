@@ -35,6 +35,21 @@ def parse_args(argv=None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def _format_enriched_text(enriched) -> None:
+    """Print enriched metrics in human-readable text format."""
+    if not enriched:
+        print("No metrics found.")
+        return
+    for e in enriched:
+        ctx_str = ", ".join(f"{k}={v}" for k, v in e.context.items())
+        ctx_display = f" [{ctx_str}]" if ctx_str else ""
+        print(
+            f"{e.metric.pipeline}/{e.metric.name} "
+            f"{e.metric.status.value} "
+            f"value={e.metric.value}{ctx_display}"
+        )
+
+
 def main(argv=None) -> None:  # pragma: no cover — thin integration glue
     args = parse_args(argv)
     config = load_config(args.config)
@@ -55,17 +70,7 @@ def main(argv=None) -> None:  # pragma: no cover — thin integration glue
     if args.fmt == "json":
         print(json.dumps([e.to_dict() for e in enriched], indent=2))
     else:
-        if not enriched:
-            print("No metrics found.")
-            return
-        for e in enriched:
-            ctx_str = ", ".join(f"{k}={v}" for k, v in e.context.items())
-            ctx_display = f" [{ctx_str}]" if ctx_str else ""
-            print(
-                f"{e.metric.pipeline}/{e.metric.name} "
-                f"{e.metric.status.value} "
-                f"value={e.metric.value}{ctx_display}"
-            )
+        _format_enriched_text(enriched)
 
 
 if __name__ == "__main__":
