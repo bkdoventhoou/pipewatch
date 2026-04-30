@@ -59,6 +59,7 @@ class AuditLog:
         pipeline: Optional[str] = None,
         metric_name: Optional[str] = None,
     ) -> List[AuditEvent]:
+        """Return recorded events, optionally filtered by pipeline and/or metric name."""
         events = self._events
         if pipeline:
             events = [e for e in events if e.pipeline == pipeline]
@@ -66,6 +67,16 @@ class AuditLog:
             events = [e for e in events if e.metric_name == metric_name]
         return list(events)
 
+    def get_last_event(
+        self,
+        pipeline: str,
+        metric_name: str,
+    ) -> Optional[AuditEvent]:
+        """Return the most recent event for a specific pipeline and metric, or None."""
+        matches = self.get_events(pipeline=pipeline, metric_name=metric_name)
+        return matches[-1] if matches else None
+
     def clear(self) -> None:
+        """Clear all recorded events and reset last-seen status tracking."""
         self._events.clear()
         self._last_status.clear()
